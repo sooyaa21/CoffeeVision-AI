@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CoffeeVision AI</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<!-- ===========================
+SIDEBAR
+=========================== -->
+
+<div class="sidebar">
+
+    <div class="logo">
+
+        <i class="fa-solid fa-mug-hot"></i>
+
+        <h2>CoffeeVision AI</h2>
+
+        <span>Klasifikasi Biji Kopi</span>
+
+    </div>
+
+    <ul class="menu">
+
+        <li>
+            <a href="#dashboard">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="#upload">
+                <i class="fa-solid fa-upload"></i>
+                Upload Gambar
+            </a>
+        </li>
+
+        <li>
+            <a href="#analytics">
+                <i class="fa-solid fa-chart-column"></i>
+                Analitik
+            </a>
+        </li>
+
+        <li>
+            <a href="#about">
+                <i class="fa-solid fa-circle-info"></i>
+                Tentang
+            </a>
+        </li>
+
+    </ul>
+
+</div>
+
+<!-- ===========================
+MAIN
+=========================== -->
+
+<div class="main">
+
+<!-- ===========================
+HEADER
+=========================== -->
+
+<section id="dashboard">
+
+    <div class="topbar">
+
+        <div>
+
+            <h2>Klasifikasi Biji Kopi</h2>
+
+            <p>
+                Sistem klasifikasi tingkat roasting menggunakan
+                Deep Learning MobileNetV2
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ===========================
+CARD
+=========================== -->
+
+<div class="cards">
+
+    <div class="card-box">
+        <i class="fa-solid fa-award"></i>
+        <h5>Akurasi</h5>
+        <h2>98.5%</h2>
+    </div>
+
+    <div class="card-box">
+        <i class="fa-solid fa-layer-group"></i>
+        <h5>Jumlah Kelas</h5>
+        <h2>4</h2>
+    </div>
+
+    <div class="card-box">
+        <i class="fa-solid fa-image"></i>
+        <h5>Ukuran Gambar</h5>
+        <h2>224 × 224</h2>
+    </div>
+
+    <div class="card-box">
+        <i class="fa-solid fa-brain"></i>
+        <h5>Model AI</h5>
+        <h2>MobileNetV2</h2>
+    </div>
+
+</div>
+
+<!-- ===========================
+UPLOAD
+=========================== -->
+
+<section id="upload">
+
+<div class="upload-card">
+
+<h2>
+
+<i class="fa-solid fa-cloud-arrow-up"></i>
+
+Upload Gambar Biji Kopi
+
+</h2>
+
+<p>
+
+Silakan pilih gambar biji kopi kemudian tekan tombol
+<b>Analisis Gambar</b> untuk mengetahui hasil klasifikasi.
+
+</p>
+
+<form
+action="/predict"
+method="POST"
+enctype="multipart/form-data">
+
+<div class="upload-area">
+
+<input
+type="file"
+name="image"
+id="imageInput"
+accept=".jpg,.jpeg,.png"
+required>
+
+<label for="imageInput">
+
+<i class="fa-solid fa-cloud-arrow-up"></i>
+
+<h3>Pilih Gambar</h3>
+
+<p>
+
+Format yang didukung
+
+<br>
+
+JPG • JPEG • PNG
+
+</p>
+
+</label>
+
+</div>
+
+<div class="preview-card">
+
+<img
+id="previewImage"
+src=""
+alt="Preview">
+
+<div class="preview-info">
+
+<h4>
+
+<i class="fa-solid fa-image"></i>
+
+Preview Gambar
+
+</h4>
+
+<p>Nama File</p>
+
+<strong id="fileName">
+
+Belum ada gambar
+
+</strong>
+
+<hr>
+
+<p>Ukuran File</p>
+
+<strong id="fileSize">
+
+-
+
+</strong>
+
+<hr>
+
+<strong id="uploadStatus" class="status-wait">
+
+🔴 Belum ada gambar dipilih
+
+</strong>
+
+</div>
+
+</div>
+
+<button
+class="predict-btn"
+type="submit">
+
+<i class="fa-solid fa-magnifying-glass"></i>
+
+Analisis Gambar
+
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+{% if error %}
+
+<div class="alert alert-danger mt-4">
+
+    <i class="fa-solid fa-circle-exclamation"></i>
+
+    {{ error }}
+
+</div>
+
+{% endif %}
+
+{% if prediction %}
+
+<!-- ===========================
+HASIL PREDIKSI
+=========================== -->
+
+<section id="analytics">
+
+<div class="result-container">
+
+    <div class="result-image">
+
+        <img
+            src="{{ image }}"
+            alt="Coffee Bean">
+
+    </div>
+
+    <div class="result-card">
+
+        <h4>
+
+            Hasil Prediksi
+
+        </h4>
+
+        <h1>
+
+            {{ prediction }}
+
+        </h1>
+
+        <div class="prediction-badge">
+
+            <i class="fa-solid fa-circle-check"></i>
+
+            Prediksi Berhasil
+
+        </div>
+
+        <div class="confidence-card">
+
+            <div>
+
+                <span>Tingkat Keyakinan AI</span>
+
+                <h2>{{ confidence }}%</h2>
+
+            </div>
+
+            <div class="circle-confidence">
+
+                {{ confidence }}%
+
+            </div>
+
+        </div>
+
+        <div class="progress mt-4">
+
+            <div
+                class="progress-bar"
+                style="width:{{ confidence }}%;">
+
+            </div>
+
+        </div>
+
+        <p class="mt-3 text-secondary">
+
+            Model AI memiliki tingkat keyakinan sebesar
+
+            <b>{{ confidence }}%</b>
+
+            terhadap hasil klasifikasi gambar yang diunggah.
+
+        </p>
+
+        <!-- Tombol Baru -->
+
+        <div class="result-action">
+
+            <a href="/" class="upload-again">
+
+                <i class="fa-solid fa-arrow-rotate-left"></i>
+
+                Upload Gambar Lain
+
+            </a>
+
+            <a href="#upload" class="back-upload">
+
+                <i class="fa-solid fa-upload"></i>
+
+                Kembali ke Upload
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ===========================
+ANALISIS PROBABILITAS
+=========================== -->
+
+<div class="chart-card">
+
+    <div class="chart-header">
+
+        <h2>
+
+            <i class="fa-solid fa-chart-column"></i>
+
+            Analisis Probabilitas
+
+        </h2>
+
+        <p>
+
+            Persentase kemungkinan untuk setiap kelas biji kopi.
+
+        </p>
+
+    </div>
+
+    <canvas id="predictionChart"></canvas>
+
+</div>
+
+<!-- ===========================
+RINGKASAN HASIL
+=========================== -->
+
+<div class="info-card">
+
+    <h2>
+
+        <i class="fa-solid fa-square-poll-vertical"></i>
+
+        Ringkasan Hasil Analisis
+
+    </h2>
+
+    <div class="class-grid">
+
+        <div class="class-item">
+
+            <h4>🌑 Dark Roast</h4>
+
+            <p>
+
+                Biji kopi dipanggang sangat lama sehingga menghasilkan
+                warna gelap, rasa pahit yang kuat,
+                dan aroma smoky.
+
+            </p>
+
+        </div>
+
+        <div class="class-item">
+
+            <h4>🟢 Green Bean</h4>
+
+            <p>
+
+                Biji kopi mentah yang belum mengalami proses roasting
+                dan masih berwarna hijau alami.
+
+            </p>
+
+        </div>
+
+        <div class="class-item">
+
+            <h4>🟤 Light Roast</h4>
+
+            <p>
+
+                Roasting ringan sehingga karakter asli kopi
+                masih sangat terasa dengan tingkat
+                keasaman lebih tinggi.
+
+            </p>
+
+        </div>
+
+        <div class="class-item">
+
+            <h4>☕ Medium Roast</h4>
+
+            <p>
+
+                Roasting sedang dengan rasa yang seimbang
+                antara aroma, body,
+                dan tingkat keasaman.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+{% endif %}
+
+<!-- ===========================
+ABOUT
+=========================== -->
+
+<section id="about">
+
+<div class="about-card">
+
+    <h2>
+
+        <i class="fa-solid fa-circle-info"></i>
+
+        Tentang CoffeeVision AI
+
+    </h2>
+
+    <p>
+
+        CoffeeVision AI merupakan aplikasi berbasis
+        Deep Learning yang digunakan untuk
+        mengklasifikasikan tingkat roasting
+        biji kopi menggunakan model
+        <b>MobileNetV2</b>.
+
+    </p>
+
+    <p>
+
+        Pengguna hanya perlu mengunggah gambar,
+        kemudian sistem akan melakukan analisis
+        secara otomatis dan menampilkan hasil
+        prediksi beserta tingkat keyakinan model AI.
+
+    </p>
+
+    <div class="about-grid">
+
+        <div>
+
+            <h4>
+
+                🤖 Teknologi
+
+            </h4>
+
+            <p>
+
+                Flask • TensorFlow • MobileNetV2
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <h4>
+
+                🧠 Metode
+
+            </h4>
+
+            <p>
+
+                Transfer Learning
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <h4>
+
+                📷 Dataset
+
+            </h4>
+
+            <p>
+
+                Coffee Bean 224 Dataset
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <h4>
+
+                💻 Bahasa
+
+            </h4>
+
+            <p>
+
+                Python • HTML • CSS • JavaScript
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+<!-- ===========================
+FOOTER
+=========================== -->
+
+<footer class="footer">
+
+    <h3>
+
+        ☕ CoffeeVision AI
+
+    </h3>
+
+    <p>
+
+        Sistem Klasifikasi Tingkat Roasting Biji Kopi
+        menggunakan Deep Learning MobileNetV2.
+
+    </p>
+
+    <small>
+
+        © 2025 | Project Artificial Intelligence
+
+    </small>
+
+</footer>
+
+</div>
+
+<!-- ===========================
+CHART JS
+=========================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{% if probabilities %}
+
+<script>
+
+const probabilities = {{ probabilities | tojson }};
+
+const ctx = document.getElementById("predictionChart");
+
+new Chart(ctx,{
+
+    type:"bar",
+
+    data:{
+
+        labels:[
+
+            "Dark Roast",
+
+            "Green Bean",
+
+            "Light Roast",
+
+            "Medium Roast"
+
+        ],
+
+        datasets:[{
+
+            label:"Probabilitas",
+
+            data:probabilities,
+
+            backgroundColor:[
+
+                "#3E2723",
+
+                "#43A047",
+
+                "#D7B899",
+
+                "#8D6E63"
+
+            ],
+
+            borderRadius:15,
+
+            borderSkipped:false
+
+        }]
+
+    },
+
+    options:{
+
+        responsive:true,
+
+        plugins:{
+
+            legend:{
+
+                display:false
+
+            },
+
+            tooltip:{
+
+                backgroundColor:"#4E342E",
+
+                titleColor:"#fff",
+
+                bodyColor:"#fff",
+
+                padding:12,
+
+                cornerRadius:10
+
+            }
+
+        },
+
+        scales:{
+
+            y:{
+
+                beginAtZero:true,
+
+                max:1,
+
+                ticks:{
+
+                    callback:function(value){
+
+                        return value*100+" %";
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+});
+
+</script>
+
+{% endif %}
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>
